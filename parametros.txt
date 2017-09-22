@@ -1,0 +1,8 @@
+1. Se utiliza la representación en forma de ruta.
+2. La población inicial se puede producir de dos maneras: se inicializa a los
+individuos aleatoriamente.
+3. El método de selección puede ser el universal ó el de torneos.
+4. Los operadores de cruzamiento que se pueden utilizar son los siguientes OX,
+PMX, CX.
+5. La mutación se lleva a cabo intercambiando dos ciudades de un cromosoma al
+azar. 
