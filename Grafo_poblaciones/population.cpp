@@ -1,9 +1,9 @@
 #include "population.h"
 
 /** Parametros **/
-int TOTAL_POPULATION = 500;
+int TOTAL_POPULATION = 500; //500
 double MUTATION_PROBABILITY = 0.07;
-int NUMBER_OF_GENERATIONS = 1000;
+int NUMBER_OF_GENERATIONS = 2000; //1000
 int ELITE = 1; // el mejor permanece en la siguiente generacion
 
 /** Destructor **/

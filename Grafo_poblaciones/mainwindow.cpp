@@ -6,13 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->lb_i->setStyleSheet("QLabel{ background-color : blue; color : white; }");
-    ui->lb_i->setAlignment(Qt::AlignCenter);
-    ui->lb_f->setStyleSheet("QLabel{ background-color : green; color : white; }");
-    ui->lb_f->setAlignment(Qt::AlignCenter);
 }
 
-void MainWindow::graphicsNode(int tam,int size)
+void MainWindow::graphicsNode(int tam,int size) //tam es el numero de nodos
 {
     int matrix[2]={size,size};
     g =new Graph(matrix);
@@ -23,13 +19,12 @@ void MainWindow::graphicsNode(int tam,int size)
     QPen outlinePen(Qt::black);
 
     g->randomInsert(scene,redBrush,outlinePen,tam);
-    g->cuadricular(scene,outlinePen);
-    g->print();
-    g->printStatic();
-
 
     /* AQUI EMPIEZA LA PARTE DEL ALGORITMO GENETICO */
-    ios_base::sync_with_stdio(true);
+    int punto_a[2]; //punto para los search node
+    int punto_b[2]; //punto para los search node
+    int punto_inicio[2]; //primer punto del recorrido
+    ios_base::sync_with_stdio(true);//incializamos el random
     srand ( unsigned ( time(0) ) );
     vector<Point> points;
     /** Leemos el grafo **/
@@ -41,90 +36,35 @@ void MainWindow::graphicsNode(int tam,int size)
         points.push_back( Point(x,y) );
     }
     vector<Point> result = ga_tsp( points );
-    cout << "\nRoute/cycle more with more fitness found:"<< endl;
-    for(int i = 0; i < result.size(); i++)
+
+    punto_inicio[0] = result[0].x; //guardamos el primer punto del camino
+    punto_inicio[1] = result[0].y;
+
+    for(int i = 0; i < result.size()-1; i++)
     {
-        cout<< result[i].x << " " << result[i].y << endl;
+        punto_a[0] = result[i].x;
+        punto_a[1] = result[i].y;
+        punto_b[0] = result[i+1].x;
+        punto_b[1] = result[i+1].y;
+        g->insertEdge(0, punto_a, punto_b); //insertamos aristas de la solucion
+        //Dibujamos la arista
+        scene->addLine(punto_a[1]*10,punto_a[0]*10,
+                       punto_b[1]*10,punto_b[0]*10,
+                       outlinePen);
+
     }
+    //Cerramos el camino
+    g->insertEdge(0, punto_b, punto_inicio);
+    scene->addLine(punto_b[1]*10,punto_b[0]*10,
+                   punto_inicio[1]*10,punto_inicio[0]*10,
+                   outlinePen);
+
     /* AQUI TERMINA LA PARTE DEL ALGORITMO GENETICO */
-
-
-/*
-    cout<<"inicio: ";
-    g->nStatic[0]->printNode();
-    cout<<"fin: ";
-    g->nStatic[g->nStatic.size()-1]->printNode();
-    cout<<endl;
-    cout<<"A*"<<endl;
-    //g->aStar(g->nStatic[0]->coord,g->nStatic[1]->coord);
-*/
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    QPen outlinePen(Qt::red);
-    QBrush ini(Qt::blue);
-    QBrush fin(Qt::green);
-    QBrush yellow(Qt::yellow);
-    QPen arista(Qt::black);
-
-    QString x,y,a,b;
-    x= ui->i_x->text();
-    y= ui->i_y->text();
-    a= ui->f_x->text();
-    b= ui->f_y->text();
-    int p1[2]={x.toInt(),y.toInt()};
-    int p2[2]={a.toInt(),b.toInt()};
-    if(g->searchNode(p1) && g->searchNode(p2)){
-        g->delColor(scene,yellow,arista);
-        g->colorNode(scene,arista,ini,fin,p1,p2);
-        string res=g->searchBlind(scene,outlinePen,p1,p2);
-        Dialog *dialog= new Dialog();
-        dialog->result(res);
-        dialog->show();
-    }
-    else{
-        QMessageBox reply;
-        reply.question(this, "Alerta", "No existen estos puntos",
-             QMessageBox::Ok);
-    }
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-
-    QPen outlinePen(Qt::red);
-    QBrush ini(Qt::blue);
-    QBrush fin(Qt::green);
-    QBrush yellow(Qt::yellow);
-    QPen arista(Qt::black);
-
-    QString x,y,a,b;
-    x= ui->i_x->text();
-    y= ui->i_y->text();
-    a= ui->f_x->text();
-    b= ui->f_y->text();
-    int p1[2]={x.toInt(),y.toInt()};
-    int p2[2]={a.toInt(),b.toInt()};
-    if(g->searchNode(p1) && g->searchNode(p2)){
-        g->delColor(scene,yellow,arista);
-        g->colorNode(scene,arista,ini,fin,p1,p2);
-        string resA=g->aStar(scene,outlinePen,p1,p2);
-        cout<<"resA"<<resA<<endl;
-        Dialog *dialog= new Dialog();
-        dialog->result(resA);
-        dialog->show();
-    }
-    else{
-        QMessageBox reply;
-        reply.question(this, "Alerta", "No existen estos puntos",
-             QMessageBox::Ok);
-    }
 }
 
 void MainWindow::on_pushButton_3_clicked()

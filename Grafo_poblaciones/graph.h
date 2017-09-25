@@ -12,7 +12,6 @@ struct Graph{
     int len=10;
     vector<Node*> nStatic;
 
-    //list<Node*>nodes;
     Graph(int*); //Constructor del grafo recibe las dimesiones en un array
     Node* searchNode(int*); //Busqueda si existe el Nodo dentro del grafo (NULL o Nodo*)
     Edge* searchEdge(int*,int*); //Busqueda si existe la arista entre dos Nodos (Null o Edge*)
@@ -22,17 +21,11 @@ struct Graph{
     bool deleteNode(int*); //Elimina un nodo, recibe : coord Nodo
     bool checkDimension(int*,int*);
     void randomInsert(QGraphicsScene *,QBrush,QPen,int);//Inserta una cantidad de nodos
-    void cuadricular(QGraphicsScene *,QPen);
-    string searchBlind(QGraphicsScene *,QPen,int*,int*);
     void print();
     void printStatic();
     void colorNode(QGraphicsScene *,QPen,QBrush,QBrush,int*,int*);
     void delVisit(); //quita visit de todos los nodos
     void delColor(QGraphicsScene *,QBrush,QPen);//colorea todos normalmente
-
-    string aStar(QGraphicsScene *,QPen,int*,int*);//Busqueda desde un nodo inicial y final
-    //int distanciaEuclidiana(int*,int*);
-    vector<Node*> sortStaticTemp(vector<Node*>);
 };
 
 
